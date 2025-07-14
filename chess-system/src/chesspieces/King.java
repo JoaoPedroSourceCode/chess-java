@@ -8,6 +8,12 @@ public class King extends ChessPiece {
     public King() {
     }
 
+    @Override
+    public boolean[][] possibleMove() {
+        boolean [][] mat = new boolean [board.getRows()][board.getColumns()];
+        return mat;
+    }
+
     public King(Board board, Color color) {
         super(board, color);
     }
