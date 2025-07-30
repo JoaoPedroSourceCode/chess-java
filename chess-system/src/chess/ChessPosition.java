@@ -25,13 +25,11 @@ public class ChessPosition {
 
     protected Position toPosition () {
         return new Position (8 - row, column - 'a');
-
     }
 
     static protected ChessPosition fromPosition(Position position) {
-        ChessPosition chessPosition = new ChessPosition((char) ( 'a' - position.getColumn() ), (8 - position.getRow()));
+        ChessPosition chessPosition = new ChessPosition((char) ( 'a' + position.getColumn() ), (8 - position.getRow()));
         return chessPosition;
-     
     }
 
     @Override
