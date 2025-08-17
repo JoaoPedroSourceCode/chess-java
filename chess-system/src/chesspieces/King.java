@@ -3,10 +3,20 @@ package chesspieces;
 import boardgame.Board;
 import boardgame.Position;
 import chess.ChessPiece;
+import chess.ChessMatch;
 import chess.Color;
 
+
 public class King extends ChessPiece {
+
+    private ChessMatch chessMatch;
+
     public King() {
+    }
+
+    public King(Board board, Color color, ChessMatch chessMatch) {
+        super(board, color);
+        this.chessMatch = chessMatch;
     }
 
     @Override
@@ -64,6 +74,30 @@ public class King extends ChessPiece {
             mat[p.getRow()][p.getColumn()] = true;
         }
 
+        //specialMoveCastling
+        if (getMoveCount() == 0 && !chessMatch.getCheck()) {
+
+            //specialMoveCastling_KingSideRook
+            Position pt1 = new Position(position.getRow(), position.getColumn() + 3);
+            if (testRookCastling(pt1)) {
+                Position p1 = new Position(position.getRow(), position.getColumn() + 1);
+                Position p2 = new Position(position.getRow(), position.getColumn() + 2);
+                if (getBoard().piece(p1) == null && getBoard().piece(p2) == null) {
+                    mat[position.getRow()][position.getColumn() + 2] = true;
+                }
+            }
+
+            //specialMoveCastling_QueenSideRook
+            Position pt2 = new Position(position.getRow(), position.getColumn() - 4);
+            if (testRookCastling(pt2)) {
+                Position p3 = new Position(position.getRow(), position.getColumn() - 1);
+                Position p4 = new Position(position.getRow(), position.getColumn() - 2);
+                Position p5 = new Position(position.getRow(), position.getColumn() - 3);
+                if (getBoard().piece(p3) == null && getBoard().piece(p4) == null && getBoard().piece(p5) == null) {
+                    mat[position.getRow()][position.getColumn() - 2] = true;
+                }
+            }
+        }
         return mat;
     }
 
@@ -73,8 +107,9 @@ public class King extends ChessPiece {
 
     }
 
-    public King(Board board, Color color) {
-        super(board, color);
+    public boolean testRookCastling(Position position) {
+        ChessPiece p = (ChessPiece) board.piece(position);
+        return p != null && p.getColor() == getColor() && p instanceof Rook && p.getMoveCount() == 0;
     }
 
     @Override
